@@ -58,15 +58,20 @@ const ul = document.querySelector('ul')!;
 const list = new ListTemplate(ul);
 form.addEventListener('submit', (e: Event) => {
   e.preventDefault();
+  let values: [string, string, number] = [
+    tofrom.value,
+    details.value,
+    amount.valueAsNumber,
+  ];
 
   let doc: HasFormatteur;
   if (type.value === 'invoice') {
     console.log('new invoice');
-    doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber);
+    doc = new Invoice(...values);
   } else {
     console.log('new payment');
 
-    doc = new Payment(tofrom.value, details.value, amount.valueAsNumber);
+    doc = new Payment(...values);
   }
   console.log(type.value, tofrom.value, details.value, amount.valueAsNumber);
 
@@ -82,26 +87,49 @@ const addUID = <T extends { name: string }>(obj: T) => {
 let doc5 = addUID({ name: 'yoshi', age: 40 });
 console.log(doc5);
 
+// ENUMS
+
+enum ResourceType {
+  BOOK,
+  AUHTHOR,
+  FILM,
+  DIRECTOR,
+  PERSON,
+}
 interface Resource<T> {
   uid: number;
-  resourceName: string;
+  resourceType: ResourceType;
   data: T;
 }
 
 const doc6: Resource<string> = {
   uid: 1,
-  resourceName: 'person',
+  resourceType: ResourceType.BOOK,
   data: 'shaun',
 };
 const doc7: Resource<object> = {
   uid: 1,
-  resourceName: 'person',
+  resourceType: 'person',
   data: { name: 'shaunn' },
 };
 const doc8: Resource<string[]> = {
   uid: 1,
-  resourceName: 'person',
+  resourceType: 'person',
   data: ['shaunn'],
 };
 
 console.log(doc6, doc7, doc8);
+
+// Tuples (when we define a certain type at a certain place)
+
+let arr = ['ryu', 25, true];
+arr[0] = false;
+arr[1] = 'yoshi';
+arr = [330, false, 'yoshi'];
+
+let tup: [string, number, boolean] = ['ryu', 25, true];
+tup[0] = 'ken';
+tup[1] = 30;
+
+let student: [string, number];
+student = ['chun-li', 3122];
